@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Projects/Project_Android/pebblebee/pebblebee_mvvm_clean_architectur/app/src/main/res/drawable/avatar_background_blue_drawable.xml" value="0.24635416666666668" />
+        <entry key="..\:/Projects/Project_Android/pebblebee/pebblebee_mvvm_clean_architectur/app/src/main/res/drawable/avatar_outline.xml" value="0.24635416666666668" />
+        <entry key="..\:/Projects/Project_Android/pebblebee/pebblebee_mvvm_clean_architectur/app/src/main/res/drawable/background_activities_summary_background.xml" value="0.24635416666666668" />
+        <entry key="..\:/Projects/Project_Android/pebblebee/pebblebee_mvvm_clean_architectur/app/src/main/res/drawable/map_background_white.xml" value="0.27395833333333336" />
+        <entry key="..\:/Projects/Project_Android/pebblebee/pebblebee_mvvm_clean_architectur/app/src/main/res/drawable/map_background_yellow.xml" value="0.25885416666666666" />
+        <entry key="..\:/Projects/Project_Android/pebblebee/pebblebee_mvvm_clean_architectur/app/src/main/res/drawable/pebblebee_logo.xml" value="0.21875" />
+        <entry key="..\:/Projects/Project_Android/pebblebee/pebblebee_mvvm_clean_architectur/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.24635416666666668" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
