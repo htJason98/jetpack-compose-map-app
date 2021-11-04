@@ -6,7 +6,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -14,6 +13,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mota.pebblebee.R
+import com.mota.pebblebee.common.Constants
+import com.mota.pebblebee.ui.screens.account.AccountScreen
 import com.mota.pebblebee.ui.screens.bottomnavigation.NavigationItem
 import com.mota.pebblebee.ui.theme.PebblebeeTheme
 
@@ -21,51 +22,23 @@ import com.mota.pebblebee.ui.theme.PebblebeeTheme
 @Composable
 fun HomeScreen() {
     var namePage by remember { mutableStateOf("Account") }
+    var sheetPeekHeight by remember { mutableStateOf(120) }
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
     ) {
         val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-            bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
+            bottomSheetState = rememberBottomSheetState(BottomSheetValue.Collapsed)
         )
-        val coroutineScope = rememberCoroutineScope()
         BottomSheetScaffold(
-            modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp),
+            modifier = Modifier
+                .padding(0.dp, 20.dp, 0.dp, 0.dp),
             scaffoldState = bottomSheetScaffoldState,
-            sheetPeekHeight = 120.dp,
-            sheetBackgroundColor = Color.Yellow,
+            sheetPeekHeight = sheetPeekHeight.dp,
+            sheetBackgroundColor = Color.White,
             backgroundColor = Color.White,
-            sheetContent = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .size(50.dp, 4.dp)
-                                .background(color = Color.Gray)
-                                .alpha(0.1f)
-                        ) { }
-                        Row(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = namePage,
-                                textAlign = TextAlign.Center,
-                                color = Color.Black
-                            )
-                        }
-                    }
-                }
-            },
+            sheetContent = { SheetContent(namePage = namePage) },
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -84,6 +57,34 @@ fun HomeScreen() {
             verticalAlignment = Alignment.Bottom
         ) {
             BottomNavigationBar(onNamePageChange = { namePage = it })
+        }
+    }
+}
+
+@ExperimentalMaterialApi
+fun caculateFraction(scaffoldState: BottomSheetScaffoldState): Float {
+    val fraction = scaffoldState.bottomSheetState.progress.fraction
+    val targetValue = scaffoldState.bottomSheetState.targetValue
+    val currentValue = scaffoldState.bottomSheetState.currentValue
+    return when {
+        currentValue == BottomSheetValue.Collapsed && targetValue == BottomSheetValue.Collapsed -> 0f
+        currentValue == BottomSheetValue.Expanded && targetValue == BottomSheetValue.Expanded -> 1f
+        currentValue == BottomSheetValue.Collapsed && targetValue == BottomSheetValue.Expanded -> fraction
+        else -> 1f - fraction
+    }
+}
+
+@Composable
+fun SheetContent(namePage: String) {
+    when(namePage) {
+        Constants.ACCOUNT_PAGE -> {
+            AccountScreen()
+        }
+        Constants.DEVICE_PAGE -> {
+
+        }
+        Constants.SETTING_PAGE -> {
+
         }
     }
 }
