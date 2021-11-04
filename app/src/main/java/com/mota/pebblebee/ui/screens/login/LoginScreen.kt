@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.mota.pebblebee.R
 import com.mota.pebblebee.common.Constants
-import com.mota.pebblebee.ui.screens.devices.HomeScreenViewModel
+import com.mota.pebblebee.ui.screens.home.HomeScreenViewModel
 import com.mota.pebblebee.ui.theme.PebblebeeTheme
 
 const val TAG = "LoginScreen"

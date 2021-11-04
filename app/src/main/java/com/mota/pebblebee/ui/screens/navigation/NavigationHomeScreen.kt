@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mota.pebblebee.ui.screens.devices.HomeScreen
+import com.mota.pebblebee.ui.screens.home.HomeScreen
 import com.mota.pebblebee.ui.screens.login.LoginScreen
 
 class NavigationHomeScreen {

@@ -1,4 +1,4 @@
-package com.mota.pebblebee.ui.screens.devices
+package com.mota.pebblebee.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
