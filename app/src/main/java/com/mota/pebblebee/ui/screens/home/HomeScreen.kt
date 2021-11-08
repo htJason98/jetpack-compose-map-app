@@ -12,12 +12,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.mota.pebblebee.R
 import com.mota.pebblebee.common.Constants
 import com.mota.pebblebee.ui.screens.account.AccountScreen
 import com.mota.pebblebee.ui.screens.bottomnavigation.NavigationItem
+import com.mota.pebblebee.ui.screens.device.DeviceScreen
 import com.mota.pebblebee.ui.theme.PebblebeeTheme
 
+@ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
 fun HomeScreen() {
@@ -74,6 +77,8 @@ fun caculateFraction(scaffoldState: BottomSheetScaffoldState): Float {
     }
 }
 
+@ExperimentalMaterialApi
+@ExperimentalPagerApi
 @Composable
 fun SheetContent(namePage: String) {
     when(namePage) {
@@ -81,7 +86,7 @@ fun SheetContent(namePage: String) {
             AccountScreen()
         }
         Constants.DEVICE_PAGE -> {
-
+            DeviceScreen()
         }
         Constants.SETTING_PAGE -> {
 
@@ -131,6 +136,7 @@ fun BottomNavigationBar(onNamePageChange: (String) -> Unit) {
     }
 }
 
+@ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable

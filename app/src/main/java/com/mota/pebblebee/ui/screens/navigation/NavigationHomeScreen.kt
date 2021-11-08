@@ -6,10 +6,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.mota.pebblebee.ui.screens.home.HomeScreen
 import com.mota.pebblebee.ui.screens.login.LoginScreen
 
 class NavigationHomeScreen {
+    @ExperimentalPagerApi
     @ExperimentalMaterialApi
     @Composable
     fun initNavigationController() {
