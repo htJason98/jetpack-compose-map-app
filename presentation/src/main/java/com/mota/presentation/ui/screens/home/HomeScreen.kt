@@ -12,6 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.domain.entities.PbDevice
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.mota.presentation.R
 import com.mota.presentation.common.Constants
@@ -27,7 +28,7 @@ import com.mota.presentation.ui.theme.PebblebeeTheme
 fun HomeScreen() {
     var namePage by remember { mutableStateOf("Account") }
     var sheetPeekHeight by remember { mutableStateOf(120) }
-    var deviceData by remember { mutableStateOf("") }
+    var deviceData: PbDevice? by remember { mutableStateOf(null) }
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(BottomSheetValue.Collapsed)
     )
@@ -87,7 +88,7 @@ fun caculateFraction(scaffoldState: BottomSheetScaffoldState): Float {
 @ExperimentalMaterialApi
 @ExperimentalPagerApi
 @Composable
-fun SheetContent(namePage: String, onDataChange: (String) -> Unit) {
+fun SheetContent(namePage: String, onDataChange: (PbDevice?) -> Unit) {
     when(namePage) {
         Constants.ACCOUNT_PAGE -> {
             AccountScreen()

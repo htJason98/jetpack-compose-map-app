@@ -22,11 +22,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.example.domain.entities.PbDevice
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.android.gms.maps.model.LatLng
 import com.mota.presentation.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -34,7 +38,7 @@ import kotlinx.coroutines.launch
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
-fun DeviceScreen(onDataChange: (String) -> Unit) {
+fun DeviceScreen(onDataChange: (PbDevice?) -> Unit) {
     var tabSelected by remember { mutableStateOf("Mine") }
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
@@ -148,25 +152,19 @@ fun Modifier.customTabIndicatorOffset(
 }
 
 @Composable
-fun MinePage(onDataChange: (String) -> Unit) {
+fun MinePage(onDataChange: (PbDevice?) -> Unit) {
     val models = listOf(
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "11",
-        "12",
-        "13",
-        "14",
-        "15",
-        "16",
-        "17"
+        PbDevice("1ac","124342", "Finder's Huu", LatLng(0.1121, 10.004), 19085038503, ""),
+        PbDevice("2ac","151512", "Finder's Dan", LatLng(0.1121, 10.004), 19085038503, ""),
+        PbDevice("3ac","121525", "Finder's Tony", LatLng(0.1121, 10.004), 19085038503, ""),
+        PbDevice("4ac","136323", "Found 's Huu", LatLng(0.1121, 10.004), 19085038503, ""),
+        PbDevice("5ac","135312", "BlackCard 's Huu", LatLng(0.1121, 10.004), 19085038503, ""),
+        PbDevice("6ac","175453", "Honey's Huu", LatLng(0.1121, 10.004), 19085038503, ""),
+        PbDevice("7ac","135773", "Finder's Vet", LatLng(0.1121, 10.004), 19085038503, ""),
+        PbDevice("8ac","186945", "Finder's Ka", LatLng(0.1121, 10.004), 19085038503, ""),
+        PbDevice("9ac","114515", "BlackCard's Ka", LatLng(0.1121, 10.004), 19085038503, ""),
+        PbDevice("7ad","174788", "Finder's Loi", LatLng(0.1121, 10.004), 19085038503, ""),
+        PbDevice("8ad","124267", "Finder's Hong", LatLng(0.1121, 10.004), 19085038503, ""),
     )
     LazyColumn(
         modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 170.dp)
@@ -177,7 +175,7 @@ fun MinePage(onDataChange: (String) -> Unit) {
                 modifier = Modifier.clickable {
                     onDataChange(it)
                 }) {
-                DeviceItem(deviceName = it)
+                DeviceItem(pbDevice = it)
             }
         }
     }
@@ -186,12 +184,10 @@ fun MinePage(onDataChange: (String) -> Unit) {
 @Composable
 fun SharedPage() {
     Text(text = "Shared", color = Color.Black)
-    Log.d("CHECK", "2")
 }
 
-
 @Composable
-fun DeviceItem(deviceName: String) {
+fun DeviceItem(pbDevice: PbDevice) {
     ConstraintLayout {
         val (deviceIcon, name, location, lastSeen, divider) = createRefs()
         Box(
@@ -205,7 +201,7 @@ fun DeviceItem(deviceName: String) {
                 }
         )
         Text(
-            text = "item: $deviceName",
+            text = pbDevice.deviceName,
             color = Color.Black,
             modifier = Modifier
                 .constrainAs(name) {
@@ -276,8 +272,8 @@ fun DeviceItem(deviceName: String) {
 @SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalMaterialApi
 @Composable
-fun DetailDeviceBottomSheet(deviceData: String, onDataChange: (String) -> Unit) {
-    var deviceDataCurrent = ""
+fun DetailDeviceBottomSheet(deviceData: PbDevice?, onDataChange: (PbDevice?) -> Unit) {
+    var currentDevice: PbDevice? = null
     val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
     ModalBottomSheetLayout(
@@ -285,7 +281,7 @@ fun DetailDeviceBottomSheet(deviceData: String, onDataChange: (String) -> Unit) 
         sheetBackgroundColor = Color.White,
         sheetContent = { DeviceDetailView(deviceData, onDataChange, scope, state) },
     ) {
-        if (deviceDataCurrent != deviceData) {
+        if (currentDevice != deviceData) {
             scope.launch {
                 state.show()
             }
@@ -296,8 +292,8 @@ fun DetailDeviceBottomSheet(deviceData: String, onDataChange: (String) -> Unit) 
 @ExperimentalMaterialApi
 @Composable
 fun DeviceDetailView(
-    deviceData: String,
-    onDataChange: (String) -> Unit,
+    deviceData: PbDevice?,
+    onDataChange: (PbDevice?) -> Unit,
     scope: CoroutineScope,
     state: ModalBottomSheetState
 ) {
@@ -306,12 +302,12 @@ fun DeviceDetailView(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val (divider, btnBack, deviceName) = createRefs()
+        val (btnPull, btnBack, deviceName, divider, info) = createRefs()
         Row(
             modifier = Modifier
                 .size(50.dp, 4.dp)
                 .background(Color.Gray)
-                .constrainAs(divider) {
+                .constrainAs(btnPull) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(parent.top, margin = 12.dp)
@@ -325,23 +321,46 @@ fun DeviceDetailView(
                 .clickable {
                     scope.launch {
                         state.hide()
-                        onDataChange("")// reset data when closing the detail sheet
+                        onDataChange(null)// reset data when closing the detail sheet
                     }
                 }
                 .constrainAs(btnBack) {
                     start.linkTo(parent.start, margin = 12.dp)
-                    top.linkTo(parent.top, margin = 12.dp)
+                    top.linkTo(parent.top, margin = 24.dp)
                 }
         )
         Text(
-            text = deviceData,
+            text = deviceData?.deviceName ?: "No data",
             color = Color.Black,
             fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .constrainAs(deviceName) {
-                    top.linkTo(btnBack.bottom, margin = 12.dp)
-                    start.linkTo(parent.start, margin = 12.dp)
+                    top.linkTo(parent.top, margin = 24.dp)
+                    start.linkTo(btnBack.end, margin = 20.dp)
                 }
+        )
+        Divider(
+            modifier = Modifier
+                .height(0.5.dp)
+                .background(Color.LightGray)
+                .constrainAs(divider) {
+                    top.linkTo(deviceName.bottom, margin = 16.dp)
+                    start.linkTo(parent.start)
+                }
+        )
+        Text(
+            text = "macAddress: ${deviceData?.macAddress}\n" +
+                    "guid: ${deviceData?.guid}\n" +
+                    "latLng: ${deviceData?.latlng}\n" +
+                    "timeStamp: ${deviceData?.timeStamp}\n" +
+                    "imageUrl: ${deviceData?.imageUrl}",
+            color = Color.Black,
+            fontSize = 16.sp,
+            modifier = Modifier.constrainAs(info) {
+                top.linkTo(divider.bottom, margin = 16.dp)
+                start.linkTo(parent.start, margin = 16.dp)
+            }
         )
     }
 }
