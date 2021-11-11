@@ -20,6 +20,7 @@ import com.mota.presentation.ui.screens.account.AccountScreen
 import com.mota.presentation.ui.screens.bottomnavigation.NavigationItem
 import com.mota.presentation.ui.screens.device.DetailDeviceBottomSheet
 import com.mota.presentation.ui.screens.device.DeviceScreen
+import com.mota.presentation.ui.screens.setting.SettingsScreen
 import com.mota.presentation.ui.theme.PebblebeeTheme
 
 @ExperimentalPagerApi
@@ -97,6 +98,7 @@ fun SheetContent(namePage: String, onDataChange: (PbDevice?) -> Unit) {
             DeviceScreen(onDataChange)
         }
         Constants.SETTING_PAGE -> {
+            SettingsScreen()
         }
     }
 }
