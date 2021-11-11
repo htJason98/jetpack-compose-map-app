@@ -54,7 +54,7 @@ dependencies {
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
     implementation 'androidx.activity:activity-compose:1.3.0-alpha06'
     implementation 'androidx.compose.ui:ui-graphics:1.0.4'
     testImplementation 'junit:junit:4.+'
@@ -62,11 +62,12 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+
+    //animation
     implementation "androidx.compose.animation:animation-graphics:1.1.0-alpha06"
+
+    //navigation
     implementation "androidx.navigation:navigation-compose:2.4.0-alpha10"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha01"
-    implementation 'androidx.ui:ui-foundation:0.1.0-dev03'
 
     //modules
     implementation project(':domain')
@@ -86,7 +87,7 @@ dependencies {
     //inject
     implementation "javax.inject:javax.inject:1"
 
-    //Pager
+    //pager
     implementation "com.google.accompanist:accompanist-pager:0.19.0"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.19.0"
 
