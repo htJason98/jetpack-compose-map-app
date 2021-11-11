@@ -1,5 +1,6 @@
 package com.mota.presentation.ui.screens.device
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
@@ -18,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -26,15 +26,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.ui.foundation.HorizontalScroller
-import androidx.ui.foundation.VerticalScroller
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.mota.presentation.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
-fun DeviceScreen() {
+fun DeviceScreen(onDataChange: (String) -> Unit) {
     var tabSelected by remember { mutableStateOf("Mine") }
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
@@ -79,7 +79,7 @@ fun DeviceScreen() {
                     start.linkTo(divider.start)
                 }
         ) {
-            if (tabSelected == "Mine") MinePage() else SharedPage()
+            if (tabSelected == "Mine") MinePage(onDataChange) else SharedPage()
         }
     }
 }
@@ -148,8 +148,26 @@ fun Modifier.customTabIndicatorOffset(
 }
 
 @Composable
-fun MinePage() {
-    val models = listOf("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17")
+fun MinePage(onDataChange: (String) -> Unit) {
+    val models = listOf(
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17"
+    )
     LazyColumn(
         modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 170.dp)
     ) {
@@ -157,8 +175,8 @@ fun MinePage() {
             Surface(
                 color = Color.White,
                 modifier = Modifier.clickable {
-                Log.d("CHECK", "item!!: $it")
-            }) {
+                    onDataChange(it)
+                }) {
                 DeviceItem(deviceName = it)
             }
         }
@@ -255,10 +273,83 @@ fun DeviceItem(deviceName: String) {
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
+@ExperimentalMaterialApi
+@Composable
+fun DetailDeviceBottomSheet(deviceData: String, onDataChange: (String) -> Unit) {
+    var deviceDataCurrent = ""
+    val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val scope = rememberCoroutineScope()
+    ModalBottomSheetLayout(
+        sheetState = state,
+        sheetBackgroundColor = Color.White,
+        sheetContent = { DeviceDetailView(deviceData, onDataChange, scope, state) },
+    ) {
+        if (deviceDataCurrent != deviceData) {
+            scope.launch {
+                state.show()
+            }
+        }
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun DeviceDetailView(
+    deviceData: String,
+    onDataChange: (String) -> Unit,
+    scope: CoroutineScope,
+    state: ModalBottomSheetState
+) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        val (divider, btnBack, deviceName) = createRefs()
+        Row(
+            modifier = Modifier
+                .size(50.dp, 4.dp)
+                .background(Color.Gray)
+                .constrainAs(divider) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top, margin = 12.dp)
+                },
+            horizontalArrangement = Arrangement.Center
+        ) {}
+        Image(
+            painterResource(id = R.drawable.ic_back),
+            contentDescription = null,
+            modifier = Modifier
+                .clickable {
+                    scope.launch {
+                        state.hide()
+                        onDataChange("")// reset data when closing the detail sheet
+                    }
+                }
+                .constrainAs(btnBack) {
+                    start.linkTo(parent.start, margin = 12.dp)
+                    top.linkTo(parent.top, margin = 12.dp)
+                }
+        )
+        Text(
+            text = deviceData,
+            color = Color.Black,
+            fontSize = 18.sp,
+            modifier = Modifier
+                .constrainAs(deviceName) {
+                    top.linkTo(btnBack.bottom, margin = 12.dp)
+                    start.linkTo(parent.start, margin = 12.dp)
+                }
+        )
+    }
+}
+
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    DeviceScreen()
+    DeviceScreen(onDataChange = { it })
 }

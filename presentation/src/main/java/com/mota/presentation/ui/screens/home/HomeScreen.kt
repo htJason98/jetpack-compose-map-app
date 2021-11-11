@@ -17,6 +17,7 @@ import com.mota.presentation.R
 import com.mota.presentation.common.Constants
 import com.mota.presentation.ui.screens.account.AccountScreen
 import com.mota.presentation.ui.screens.bottomnavigation.NavigationItem
+import com.mota.presentation.ui.screens.device.DetailDeviceBottomSheet
 import com.mota.presentation.ui.screens.device.DeviceScreen
 import com.mota.presentation.ui.theme.PebblebeeTheme
 
@@ -26,14 +27,15 @@ import com.mota.presentation.ui.theme.PebblebeeTheme
 fun HomeScreen() {
     var namePage by remember { mutableStateOf("Account") }
     var sheetPeekHeight by remember { mutableStateOf(120) }
+    var deviceData by remember { mutableStateOf("") }
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberBottomSheetState(BottomSheetValue.Collapsed)
+    )
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
     ) {
-        val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-            bottomSheetState = rememberBottomSheetState(BottomSheetValue.Collapsed)
-        )
         BottomSheetScaffold(
             modifier = Modifier
                 .padding(0.dp, 20.dp, 0.dp, 0.dp),
@@ -41,7 +43,7 @@ fun HomeScreen() {
             sheetPeekHeight = sheetPeekHeight.dp,
             sheetBackgroundColor = Color.White,
             backgroundColor = Color.White,
-            sheetContent = { SheetContent(namePage = namePage) },
+            sheetContent = { SheetContent(namePage = namePage, onDataChange = { deviceData = it }) },
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -54,6 +56,11 @@ fun HomeScreen() {
                     color = Color.Black
                 )
             }
+        }
+        Row(
+            modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
+        ) {
+            DetailDeviceBottomSheet(deviceData, onDataChange = { deviceData = it })
         }
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -80,13 +87,13 @@ fun caculateFraction(scaffoldState: BottomSheetScaffoldState): Float {
 @ExperimentalMaterialApi
 @ExperimentalPagerApi
 @Composable
-fun SheetContent(namePage: String) {
+fun SheetContent(namePage: String, onDataChange: (String) -> Unit) {
     when(namePage) {
         Constants.ACCOUNT_PAGE -> {
             AccountScreen()
         }
         Constants.DEVICE_PAGE -> {
-            DeviceScreen()
+            DeviceScreen(onDataChange)
         }
         Constants.SETTING_PAGE -> {
         }
